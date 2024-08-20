@@ -107,6 +107,10 @@ document.getElementById('sendButton').addEventListener('click', function () {
 function sendQuickReplies(quickReplies) {
     try {
 
+        const preferredDateInput = document.getElementById('preferredDate').value;
+        const [year, day, month] = preferredDateInput.split('-');
+        const preferredDate = `${month}-${day}-${year}`;
+
         const slotsData = getDynamicSlotsData();
         const slots = slotsData[preferredDate];
         var cmdName = lpTag.agentSDK.cmdNames.write;
