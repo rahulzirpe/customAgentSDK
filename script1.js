@@ -112,7 +112,7 @@ function sendQuickReplies(quickReplies) {
                 console.error('Error sending quick replies:', err);
             }
         };
-
+        const slotsData = getDynamicSlotsData();
         const slots = slotsData[preferredDate];
         var cmdName = lpTag.agentSDK.cmdNames.write;
         var data = {
