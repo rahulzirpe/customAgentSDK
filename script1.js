@@ -107,11 +107,6 @@ document.getElementById('sendButton').addEventListener('click', function () {
 function sendQuickReplies(quickReplies) {
     try {
 
-        const notifyWhenDone = function (err) {
-            if (err) {
-                console.error('Error sending quick replies:', err);
-            }
-        };
         const slotsData = getDynamicSlotsData();
         const slots = slotsData[preferredDate];
         var cmdName = lpTag.agentSDK.cmdNames.write;
@@ -200,6 +195,13 @@ function sendQuickReplies(quickReplies) {
                 ]
             }
         };
+
+        const notifyWhenDone = function (err) {
+            if (err) {
+                console.error('Error sending quick replies:', err);
+            }
+        };
+
         lpTag.agentSDK.command(cmdName, data, notifyWhenDone);
 
 
