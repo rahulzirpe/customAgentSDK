@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Quick Replies</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Agent Quick Replies</h1>
+
+        <label for="preferredDate">Preferred Date:</label>
+        <input type="date" id="preferredDate" min="2024-08-20" max="2024-08-21">
+
+        <button id="generateButton">Get Time Slots</button>
+
+        <div id="quickRepliesContainer"></div>
+
+        <button id="sendButton" style="display:none;">Send Quick Replies</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/liveperson-agent-sdk/dist/liveperson-agent-sdk.min.js"></script>
+    <script src="script1.js"></script>
+</body>
+
+</html>
