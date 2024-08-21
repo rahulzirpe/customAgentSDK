@@ -25,7 +25,7 @@ function getFormattedDate(offsetDays) {
     const day = String(today.getDate()).padStart(2, '0');
     const month = String(today.getMonth() + 1).padStart(2, '0');
     const year = today.getFullYear();
-    return `${day}-${month}-${year}`;
+    return `${month}-${day}-${year}`;
 }
 
 // Function to set slotsData with dynamic dates
@@ -57,7 +57,7 @@ const slotsData = getDynamicSlotsData();
 document.getElementById('generateButton').addEventListener('click', function () {
     const preferredDateInput = document.getElementById('preferredDate').value;
     const [year, day, month] = preferredDateInput.split('-');
-    const preferredDate = `${day}-${month}-${year}`;
+    const preferredDate = `${month}-${day}-${year}`;
 
     const quickRepliesContainer = document.getElementById('quickRepliesContainer');
     quickRepliesContainer.innerHTML = ''; // Clear previous inputs
@@ -109,7 +109,7 @@ function sendQuickReplies(quickReplies) {
 
         const preferredDateInput = document.getElementById('preferredDate').value;
         const [year, day, month] = preferredDateInput.split('-');
-        const preferredDate = `${day}-${month}-${year}`;
+        const preferredDate = `${month}-${day}-${year}`;
 
         const slotsData = getDynamicSlotsData();
         const slots = slotsData[preferredDate];
