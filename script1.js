@@ -57,7 +57,7 @@ const slotsData = getDynamicSlotsData();
 document.getElementById('generateButton').addEventListener('click', function () {
     const preferredDateInput = document.getElementById('preferredDate').value;
     const [year, day, month] = preferredDateInput.split('-');
-    const preferredDate = `${month}-${day}-${year}`;
+    const preferredDate = `${day}-${month}-${year}`;
 
     const quickRepliesContainer = document.getElementById('quickRepliesContainer');
     quickRepliesContainer.innerHTML = ''; // Clear previous inputs
@@ -109,7 +109,7 @@ function sendQuickReplies(quickReplies) {
 
         const preferredDateInput = document.getElementById('preferredDate').value;
         const [year, day, month] = preferredDateInput.split('-');
-        const preferredDate = `${month}-${day}-${year}`;
+        const preferredDate = `${day}-${month}-${year}`;
 
         const slotsData = getDynamicSlotsData();
         const slots = slotsData[preferredDate];
