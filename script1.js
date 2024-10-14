@@ -407,43 +407,16 @@ END:VEVENT
 END:VCALENDAR
     `.trim();
 
-    // Create a Blob for the ICS file
-    const icsBlob = new Blob([icsContent], { type: 'text/calendar' });
-    const icsUrl = URL.createObjectURL(icsBlob); // Create the Blob URL
+    // Encode the ICS content to create a data URI
+    const encodedUri = encodeURI('data:text/calendar;charset=utf-8,' + icsContent);
 
-    // Notify when done with the structured content
-    var notifyWhenDone = function (err) {
-        if (err) {
-            console.error('Error sending Add to Calendar:', err);
-        }
-    };
-
-    var cmdName = lpTag.agentSDK.cmdNames.writeSC;
-    var data = {
-        json: {
-            "type": "vertical",
-            "tag": "generic",
-            "elements": [
-                {
-                    "type": "text",
-                    "text": "Click the button below to download and add the appointment to your calendar."
-                },
-                {
-                    "type": "button",
-                    "title": "Add to Calendar",
-                    "click": {
-                        "actions": [{
-                            "type": "link",
-                            "uri": icsUrl // Link to the ICS Blob URL
-                        }]
-                    }
-                }
-            ]
-        }
-    };
-
-    // Send the structured content
-    lpTag.agentSDK.command(cmdName, data, notifyWhenDone);
+    // Create an anchor element and trigger the download
+    const a = document.createElement('a');
+    a.href = encodedUri;
+    a.download = 'event.ics'; // Name of the file
+    document.body.appendChild(a);
+    a.click(); // Programmatically click the anchor to trigger the download
+    document.body.removeChild(a);
 });
 
 // Helper function to format dates for ICS files
@@ -451,5 +424,6 @@ function formatDateForICS(dateStr) {
     const date = new Date(dateStr);
     return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'; // Ensure proper format with Z for UTC
 }
+
     
 }
