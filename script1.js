@@ -380,7 +380,7 @@ if (preferredDateInput) {
         }
 	
 //Send Add to Calendar Button
-document.getElementById('prepareAddToCalendarButton').addEventListener('click', function () {
+document.getElementById('sendAddToCalendarButton').addEventListener('click', function () {
     const eventLocation = document.getElementById('eventLocation').value.trim();
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;
