@@ -378,79 +378,78 @@ if (preferredDateInput) {
         };
             lpTag.agentSDK.command(cmdName, data, notifyWhenDone);
         }
+//Send Add to Calendar Button
+document.getElementById('sendAddToCalendarButton').addEventListener('click', function () {
+    const eventLocation = document.getElementById('eventLocation').value.trim();
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
 
-	 
-    
-    // Send Add to Calendar
-    document.getElementById('sendAddToCalendarButton').addEventListener('click', function () {
-        const eventLocation = document.getElementById('eventLocation').value.trim();
-        const startDate = document.getElementById('startDate').value;
-        const endDate = document.getElementById('endDate').value;
-    
-        if (!eventLocation || !startDate || !endDate) {
-            alert("Please fill in all event details.");
-            return;
-        }
-    
-        // Format the dates for the ICS file
-        const formattedStartDate = formatDateForICS(startDate);
-        const formattedEndDate = formatDateForICS(endDate);
-    
-        // Create ICS content
-        const icsContent = `
-    BEGIN:VCALENDAR
-    VERSION:2.0
-    BEGIN:VEVENT
-    SUMMARY:Health Care Appointment
-    LOCATION:${eventLocation}
-    DTSTART:${formattedStartDate}
-    DTEND:${formattedEndDate}
-    END:VEVENT
-    END:VCALENDAR
-        `.trim();
-    
-        // Create a Blob for the ICS file
-        const icsBlob = new Blob([icsContent], { type: 'text/calendar' });
-        const icsUrl = URL.createObjectURL(icsBlob);
-    
-        // Send structured content with a single button to download ICS
-        var notifyWhenDone = function (err) {
-            if (err) {
-                console.error('Error sending Add to Calendar:', err);
-            }
-        };
-        
-        var cmdName = lpTag.agentSDK.cmdNames.writeSC;
-        var data = {
-            json: {
-                "type": "vertical",
-                "tag": "generic",
-                "elements": [
-                    {
-                        "type": "text",
-                        "text": "Click the button below to download and add the appointment to your calendar."
-                    },
-                    {
-                        "type": "button",
-                        "title": "Add to Calendar",
-                        "click": {
-                            "actions": [{
-                                "type": "link",
-                                "uri": icsUrl
-                            }]
-                        }
-                    }
-                ]
-            }
-        };
-    
-        lpTag.agentSDK.command(cmdName, data, notifyWhenDone);
-    });
-    
-    // Helper function to format dates for ICS files
-    function formatDateForICS(dateStr) {
-        const date = new Date(dateStr);
-        return date.toISOString().replace(/[-:]/g, '').split('.')[0];
+    if (!eventLocation || !startDate || !endDate) {
+        alert("Please fill in all event details.");
+        return;
     }
+
+    // Format the dates for the ICS file
+    const formattedStartDate = formatDateForICS(startDate);
+    const formattedEndDate = formatDateForICS(endDate);
+
+    // Create ICS content
+    const icsContent = `
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+SUMMARY:Health Care Appointment
+LOCATION:${eventLocation}
+DTSTART:${formattedStartDate}
+DTEND:${formattedEndDate}
+END:VEVENT
+END:VCALENDAR
+    `.trim();
+
+    // Create a Blob for the ICS file
+    const icsBlob = new Blob([icsContent], { type: 'text/calendar' });
+    const icsUrl = URL.createObjectURL(icsBlob);
+
+    // Send structured content with a single button to download ICS
+    var notifyWhenDone = function (err) {
+        if (err) {
+            console.error('Error sending Add to Calendar:', err);
+        }
+    };
+
+    // Constructing structured content for the customer to download the ICS file
+    var cmdName = lpTag.agentSDK.cmdNames.writeSC;
+    var data = {
+        json: {
+            "type": "vertical",
+            "tag": "generic",
+            "elements": [
+                {
+                    "type": "text",
+                    "text": "Click the button below to download and add the appointment to your calendar."
+                },
+                {
+                    "type": "button",
+                    "title": "Add to Calendar",
+                    "click": {
+                        "actions": [{
+                            "type": "link",
+                            "uri": icsUrl // Link to the dynamically generated ICS file
+                        }]
+                    }
+                }
+            ]
+        }
+    };
+
+    // Sending the structured content
+    lpTag.agentSDK.command(cmdName, data, notifyWhenDone);
+});
+
+// Helper function to format dates for ICS files
+function formatDateForICS(dateStr) {
+    const date = new Date(dateStr);
+    return date.toISOString().replace(/[-:]/g, '').split('.')[0];
+}
     
 }
