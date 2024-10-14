@@ -1,29 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agent Quick Replies</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
     <div class="container">
         <h1>Agent Quick Replies</h1>
 
         <label for="preferredDate">Preferred Date:</label>
-        <input type="date" id="preferredDate" min="2024-08-22" max="2024-08-31">
+        <input type="date" id="preferredDate" min="" max="">
 
-        <button id="generateButton">Get Time Slots</button>
+        <label for="numQuickReplies">Number of Quick Replies:</label>
+        <input type="number" id="numQuickReplies" placeholder="Enter number of quick replies" min="1" max="10">
+
+        <button id="generateButton">Generate Quick Replies</button>
 
         <div id="quickRepliesContainer"></div>
 
         <button id="sendButton" style="display:none;">Send Quick Replies</button>
+
+        <!-- These fields will appear after clicking 'Send Quick Replies' -->
+        <div id="additionalFields" style="display:none;">
+            <label for="eventLocation">Appointment Details:</label>
+            <input type="text" id="eventLocation" placeholder="Enter Appointment Details">
+
+            <label for="startDate">Start Date and Time:</label>
+            <input type="datetime-local" id="startDate">
+
+            <label for="endDate">End Date and Time:</label>
+            <input type="datetime-local" id="endDate">
+
+            <button id="sendAddToCalendarButton">Send Add to Calendar</button>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/liveperson-agent-sdk/dist/liveperson-agent-sdk.min.js"></script>
     <script src="script1.js"></script>
 </body>
-
 </html>
