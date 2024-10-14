@@ -378,8 +378,9 @@ if (preferredDateInput) {
         };
             lpTag.agentSDK.command(cmdName, data, notifyWhenDone);
         }
+	
 //Send Add to Calendar Button
-document.getElementById('sendAddToCalendarButton').addEventListener('click', function () {
+document.getElementById('prepareAddToCalendarButton').addEventListener('click', function () {
     const eventLocation = document.getElementById('eventLocation').value.trim();
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;
@@ -408,16 +409,15 @@ END:VCALENDAR
 
     // Create a Blob for the ICS file
     const icsBlob = new Blob([icsContent], { type: 'text/calendar' });
-    const icsUrl = URL.createObjectURL(icsBlob);
+    const icsUrl = URL.createObjectURL(icsBlob); // Create the Blob URL
 
-    // Send structured content with a single button to download ICS
+    // Notify when done with the structured content
     var notifyWhenDone = function (err) {
         if (err) {
             console.error('Error sending Add to Calendar:', err);
         }
     };
 
-    // Constructing structured content for the customer to download the ICS file
     var cmdName = lpTag.agentSDK.cmdNames.writeSC;
     var data = {
         json: {
@@ -434,7 +434,7 @@ END:VCALENDAR
                     "click": {
                         "actions": [{
                             "type": "link",
-                            "uri": icsUrl // Link to the dynamically generated ICS file
+                            "uri": icsUrl // Link to the ICS Blob URL
                         }]
                     }
                 }
@@ -442,14 +442,14 @@ END:VCALENDAR
         }
     };
 
-    // Sending the structured content
+    // Send the structured content
     lpTag.agentSDK.command(cmdName, data, notifyWhenDone);
 });
 
 // Helper function to format dates for ICS files
 function formatDateForICS(dateStr) {
     const date = new Date(dateStr);
-    return date.toISOString().replace(/[-:]/g, '').split('.')[0];
+    return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'; // Ensure proper format with Z for UTC
 }
     
 }
