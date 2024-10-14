@@ -24,6 +24,22 @@ h1 {
     margin-bottom: 20px;
 }
 
+label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+    color: #34495e;
+}
+
+input[type="text"],
+input[type="number"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #bdc3c7;
+}
+
 button {
     margin-top: 20px;
     width: 100%;
@@ -38,4 +54,23 @@ button {
 
 button:hover {
     background-color: #3498db;
+}
+
+#eventDetails {
+    margin-top: 20px;
+}
+
+#eventDetails label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+    color: #34495e;
+}
+
+#eventDetails input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #bdc3c7;
 }
