@@ -18,205 +18,439 @@ lpTag.agentSDK.init({
     //accessToken: 'your-access-token' // Replace with your LivePerson access token
 });
 
-// Function to get the date in dd-mm-yyyy format
-function getFormattedDate(offsetDays) {
-    const today = new Date();
-    today.setDate(today.getDate() + offsetDays);
-    const day = String(today.getDate()).padStart(2, '0');
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const year = today.getFullYear();
-    return `${day}-${month}-${year}`;
-}
 
-// Function to set slotsData with dynamic dates
-function getDynamicSlotsData() {
-    const tomorrow = getFormattedDate(1);
-    const dayAfterTomorrow = getFormattedDate(2);
+// Set min and max for preferred date input
+const today = new Date();
+const maxDate = new Date();
+maxDate.setDate(today.getDate() + 10);
 
-    console.log("Tomorrow" + [tomorrow]);
-
-    return {
-        [tomorrow]: [
-            { "slot": "10:00 AM" },
-            { "slot": "11:00 AM" },
-            { "slot": "01:00 PM" },
-            { "slot": "03:00 PM" }
-        ],
-        [dayAfterTomorrow]: [
-            { "slot": "09:00 AM" },
-            { "slot": "12:00 PM" },
-            { "slot": "02:00 PM" },
-            { "slot": "04:00 PM" }
-        ]
-    };
-}
-
-// Set the dynamic slots data
-const slotsData = getDynamicSlotsData();
+document.getElementById('preferredDate').min = today.toISOString().split('T')[0];
+document.getElementById('preferredDate').max = maxDate.toISOString().split('T')[0];
 
 document.getElementById('generateButton').addEventListener('click', function () {
-    const preferredDateInput = document.getElementById('preferredDate').value;
-    const [year, day, month] = preferredDateInput.split('-');
-    const preferredDate = `${month}-${day}-${year}`;
-
+    const numQuickReplies = document.getElementById('numQuickReplies').value;
     const quickRepliesContainer = document.getElementById('quickRepliesContainer');
     quickRepliesContainer.innerHTML = ''; // Clear previous inputs
 
-    console.log('Preferred Date:', preferredDate);
+    console.log(numQuickReplies);
+    console.log(typeof numQuickReplies);
 
-    if (slotsData[preferredDate]) {
-        const slots = slotsData[preferredDate];
-        console.log('Slots for selected date:', slots);
+    for (let i = 1; i <= numQuickReplies; i++) {
+        const label = document.createElement('label');
+        label.innerText = `Quick Reply ${i}:`;
+        quickRepliesContainer.appendChild(label);
 
-        slots.forEach((slot, index) => {
-            const label = document.createElement('label');
-            label.innerText = `Slot ${index + 1}:`;
-
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.value = slot.slot;
-            input.disabled = true; // Make the text field read-only
-
-            quickRepliesContainer.appendChild(label);
-            quickRepliesContainer.appendChild(input);
-            quickRepliesContainer.appendChild(document.createElement('br'));
-        });
-
-        document.getElementById('sendButton').style.display = 'block';
-    } else {
-        alert('No slots available for the selected date.');
-        console.log('No slots found for:', preferredDate);
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.id = `quickReply${i}`;
+        input.placeholder = `Enter Option ${i}`;
+        quickRepliesContainer.appendChild(input);
     }
+	
+    document.getElementById('sendButton').style.display = 'block';
 });
 
 document.getElementById('sendButton').addEventListener('click', function () {
+    const numQuickReplies = document.getElementById('numQuickReplies').value;
     const quickReplies = [];
 
-    const inputs = document.querySelectorAll('#quickRepliesContainer input[type="text"]');
-    inputs.forEach((input, index) => {
-        quickReplies.push({ title: input.value, payload: `quick_reply_${index + 1}` });
-    });
+    for (let i = 1; i <= numQuickReplies; i++) {
+        const text = document.getElementById(`quickReply${i}`).value.trim(); // Use trim to remove whitespace
+        if (text) {
+            quickReplies.push({ title: text, payload: `quick_reply_${i}` });
+        } else {
+            alert(`Please enter a value for Quick Reply ${i}.`); // Alert the user for blank input
+            return; // Exit the function to prevent sending empty replies
+        }
+    }
 
     if (quickReplies.length > 0) {
         sendQuickReplies(quickReplies);
-    } else {
-        alert('No slots available.');
     }
+    else {
+        alert('Please enter at least one quick reply.');
+    }
+    // Show additional fields after sending quick replies
+    document.getElementById('additionalFields').style.display = 'block';
+
 });
 
 function sendQuickReplies(quickReplies) {
-    try {
+      var notifyWhenDone = function (err) {
+            if (err) {
+                // Do something with the error
+            }
+            // called when the command is completed successfully,
+            // or when the action terminated with an error.
+        };
+        const numQuickReplies = document.getElementById('numQuickReplies').value;
+        console.log("Number of Quick replies selected=" + numQuickReplies);
+        
+	const preferredDateInput = document.getElementById('preferredDate').value;
+    //console.log("preferredDateInput : " + preferredDateInput);
 
-        const preferredDateInput = document.getElementById('preferredDate').value;
-        const [year, day, month] = preferredDateInput.split('-');
-        const preferredDate = `${month}-${day}-${year}`;
+if (preferredDateInput) {
+    // Split the date input assuming it's in the format "yyyy-mm-dd"
+    const [year, month, day] = preferredDateInput.split('-');
 
-        const slotsData = getDynamicSlotsData();
-        const slots = slotsData[preferredDate];
-        var cmdName = lpTag.agentSDK.cmdNames.write;
+    // Create a Date object (subtract 1 from month because months are 0-indexed in JavaScript)
+    const date = new Date(year, month - 1, day);
+    console.log("Date : " + date);
+
+    // Check if the date is valid
+    if (!isNaN(date.getTime())) {
+        // Array of day and month names
+        const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+        // Format the date as "Day, Month Day" (e.g., "Thursday, September 4")
+        var formattedDate = `${dayNames[date.getDay()]}, ${monthNames[date.getMonth()]} ${day}`;
+
+        console.log("formattedDate :" + formattedDate); // Example: "Thursday, September 4"
+    } else {
+        alert("Invalid date. Please enter a valid date.");
+    }
+} else {
+    alert("Please enter a preferred date.");
+}
+
+	    
+        if (numQuickReplies == "2") {
+            var cmdName = lpTag.agentSDK.cmdNames.writeSC;
+            var quickReply1 = document.getElementById('quickReply1').value;
+            var quickReply2 = document.getElementById('quickReply2').value;
+            var text1=`Please select Preferrable Time Slot for ${formattedDate}`
+
+            var data = {
+                json:{
+                    "type": "vertical",
+                    "tag": "generic",
+                    "elements": [{
+                        "type": "text",
+                        "text": text1,
+                        "tag": "title"
+                      },
+                      {
+                        "type": "button",
+                        "title": quickReply1,
+                        "click": {
+                          "actions": [
+                            {
+                              "type": "publishText",
+                              "text": `${quickReply1} ${formattedDate}`
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "type": "button",
+                        "title": quickReply2,
+                        "click": {
+                          "actions": [
+                            {
+                              "type": "publishText",
+                              "text": `${quickReply2} ${formattedDate}`
+                            }
+                          ]
+                        }
+                      }
+
+                    ]
+            }};
+           lpTag.agentSDK.command(cmdName, data, notifyWhenDone);
+        }
+
+        if (numQuickReplies == "3") {
+            var cmdName = lpTag.agentSDK.cmdNames.writeSC;
+            var quickReply1 = document.getElementById('quickReply1').value;
+            var quickReply2 = document.getElementById('quickReply2').value;
+            var quickReply3 = document.getElementById('quickReply3').value;
+
+            var text1=`Please select Preferrable Time Slot for ${formattedDate}`
+
+            var data = {
+                json:{
+                    "type": "vertical",
+                    "tag": "generic",
+                    "elements": [{
+                        "type": "text",
+                        "text": text1,
+                        "tag": "title"
+                      },
+                      {
+                        "type": "button",
+                        "title": quickReply1,
+                        "click": {
+                          "actions": [
+                            {
+                              "type": "publishText",
+                              "text": `${quickReply1} ${formattedDate}`
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "type": "button",
+                        "title": quickReply2,
+                        "click": {
+                          "actions": [
+                            {
+                              "type": "publishText",
+                              "text": `${quickReply2} ${formattedDate}`
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "type": "button",
+                        "title": quickReply3,
+                        "click": {
+                          "actions": [
+                            {
+                              "type": "publishText",
+                              "text": `${quickReply3} ${formattedDate}`
+                            }
+                          ]
+                        }
+                      }
+
+                    ]
+            }};
+            lpTag.agentSDK.command(cmdName, data, notifyWhenDone);
+        }
+
+        if (numQuickReplies == "4") {
+            var cmdName = lpTag.agentSDK.cmdNames.writeSC;
+            var quickReply1 = document.getElementById('quickReply1').value;
+            var quickReply2 = document.getElementById('quickReply2').value;
+            var quickReply3 = document.getElementById('quickReply3').value;
+            var quickReply4 = document.getElementById('quickReply4').value;
+
+            var text1=`Please select Preferrable Time Slot for ${formattedDate}`
+
+            var data = {
+                json:{
+                    "type": "vertical",
+                    "tag": "generic",
+                    "elements": [{
+                        "type": "text",
+                        "text": text1,
+                        "tag": "title"
+                      },
+                      {
+                        "type": "button",
+                        "title": quickReply1,
+                        "click": {
+                          "actions": [
+                            {
+                              "type": "publishText",
+                              "text": `${quickReply1} ${formattedDate}`
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "type": "button",
+                        "title": quickReply2,
+                        "click": {
+                          "actions": [
+                            {
+                              "type": "publishText",
+                              "text": `${quickReply2} ${formattedDate}`
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "type": "button",
+                        "title": quickReply3,
+                        "click": {
+                          "actions": [
+                            {
+                              "type": "publishText",
+                              "text": `${quickReply3} ${formattedDate}`
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "type": "button",
+                        "title": quickReply4,
+                        "click": {
+                          "actions": [
+                            {
+                              "type": "publishText",
+                              "text": `${quickReply4} ${formattedDate}`
+                            }
+                          ]
+                        }
+                      }
+
+                    ]
+            }
+        };
+
+            lpTag.agentSDK.command(cmdName, data, notifyWhenDone);
+        }
+
+        if (numQuickReplies == "5") {
+            var cmdName = lpTag.agentSDK.cmdNames.writeSC;
+            var quickReply1 = document.getElementById('quickReply1').value;
+            var quickReply2 = document.getElementById('quickReply2').value;
+            var quickReply3 = document.getElementById('quickReply3').value;
+            var quickReply4 = document.getElementById('quickReply4').value;
+            var quickReply5 = document.getElementById('quickReply5').value;
+
+            var text1=`Please select Preferrable Time Slot for ${formattedDate}`
+
+            var data = {
+                json:{
+                    "type": "vertical",
+                    "tag": "generic",
+                    "elements": [{
+                        "type": "text",
+                        "text": text1,
+                        "tag": "title"
+                      },
+                      {
+                        "type": "button",
+                        "title": quickReply1,
+                        "click": {
+                          "actions": [
+                            {
+                              "type": "publishText",
+                              "text": `${quickReply1} ${formattedDate}`
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "type": "button",
+                        "title": quickReply2,
+                        "click": {
+                          "actions": [
+                            {
+                              "type": "publishText",
+                              "text": `${quickReply2} ${formattedDate}`
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "type": "button",
+                        "title": quickReply3,
+                        "click": {
+                          "actions": [
+                            {
+                              "type": "publishText",
+                              "text": `${quickReply3} ${formattedDate}`
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "type": "button",
+                        "title": quickReply4,
+                        "click": {
+                          "actions": [
+                            {
+                              "type": "publishText",
+                              "text": `${quickReply4} ${formattedDate}`
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "type": "button",
+                        "title": quickReply5,
+                        "click": {
+                          "actions": [
+                            {
+                              "type": "publishText",
+                              "text": `${quickReply5} ${formattedDate}`
+                            }
+                          ]
+                        }
+                      }
+
+                    ]
+            }
+        };
+            lpTag.agentSDK.command(cmdName, data, notifyWhenDone);
+        }
+
+	 
+    
+    // Send Add to Calendar
+    document.getElementById('sendAddToCalendarButton').addEventListener('click', function () {
+        const eventLocation = document.getElementById('eventLocation').value.trim();
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+    
+        if (!eventLocation || !startDate || !endDate) {
+            alert("Please fill in all event details.");
+            return;
+        }
+    
+        // Format the dates for the ICS file
+        const formattedStartDate = formatDateForICS(startDate);
+        const formattedEndDate = formatDateForICS(endDate);
+    
+        // Create ICS content
+        const icsContent = `
+    BEGIN:VCALENDAR
+    VERSION:2.0
+    BEGIN:VEVENT
+    SUMMARY:Health Care Appointment
+    LOCATION:${eventLocation}
+    DTSTART:${formattedStartDate}
+    DTEND:${formattedEndDate}
+    END:VEVENT
+    END:VCALENDAR
+        `.trim();
+    
+        // Create a Blob for the ICS file
+        const icsBlob = new Blob([icsContent], { type: 'text/calendar' });
+        const icsUrl = URL.createObjectURL(icsBlob);
+    
+        // Send structured content with a single button to download ICS
+        var notifyWhenDone = function (err) {
+            if (err) {
+                console.error('Error sending Add to Calendar:', err);
+            }
+        };
+        
+        var cmdName = lpTag.agentSDK.cmdNames.writeSC;
         var data = {
-            text: "Please select any timeslot:",
-            quickReplies: {
-                "type": "quickReplies",
-                "itemsPerRow": 3,
-                "replies": [
+            json: {
+                "type": "vertical",
+                "tag": "generic",
+                "elements": [
                     {
-                        "type": "button",
-                        "tooltip": slots[0].slot,
-                        "title": slots[0].slot,
-                        "click": {
-                            "actions": [
-                                {
-                                    "type": "publishText",
-                                    "text": slots[0].slot
-                                }
-                            ],
-                            "metadata": [
-                                {
-                                    "type": "ExternalId",
-                                    "id": "Yes-1234"
-                                }
-                            ]
-                        }
+                        "type": "text",
+                        "text": "Click the button below to download and add the appointment to your calendar."
                     },
                     {
                         "type": "button",
-                        "tooltip": slots[1].slot,
-                        "title": slots[1].slot,
+                        "title": "Add to Calendar",
                         "click": {
-                            "actions": [
-                                {
-                                    "type": "publishText",
-                                    "text": slots[1].slot
-                                }
-                            ],
-                            "metadata": [
-                                {
-                                    "type": "ExternalId",
-                                    "id": "Yes-1232"
-                                }
-                            ]
-                        }
-                    },
-                    {
-                        "type": "button",
-                        "tooltip": slots[2].slot,
-                        "title": slots[2].slot,
-                        "click": {
-                            "actions": [
-                                {
-                                    "type": "publishText",
-                                    "text": slots[2].slot
-                                }
-                            ],
-                            "metadata": [
-                                {
-                                    "type": "ExternalId",
-                                    "id": "Yes-1233"
-                                }
-                            ]
-                        }
-                    },
-                    {
-                        "type": "button",
-                        "tooltip": slots[3].slot,
-                        "title": slots[3].slot,
-                        "click": {
-                            "actions": [
-                                {
-                                    "type": "publishText",
-                                    "text": slots[3].slot
-                                }
-                            ],
-                            "metadata": [
-                                {
-                                    "type": "ExternalId",
-                                    "id": "No-4324"
-                                }
-                            ]
+                            "actions": [{
+                                "type": "link",
+                                "uri": icsUrl
+                            }]
                         }
                     }
                 ]
             }
         };
-
-        const notifyWhenDone = function (err) {
-            if (err) {
-                console.error('Error sending quick replies:', err);
-            }
-        };
-
+    
         lpTag.agentSDK.command(cmdName, data, notifyWhenDone);
-
-
-
-
-        // const cmdName = lpTag.agentSDK.cmdNames.write;
-        //lpTag.agentSDK.command(cmdName, data, notifyWhenDone);
-
-        //alert('Quick replies sent successfully!');
-    } catch (error) {
-        console.error('Error sending quick replies:', error);
-        alert('Error sending quick replies.');
+    });
+    
+    // Helper function to format dates for ICS files
+    function formatDateForICS(dateStr) {
+        const date = new Date(dateStr);
+        return date.toISOString().replace(/[-:]/g, '').split('.')[0];
     }
+    
 }
