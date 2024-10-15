@@ -429,7 +429,7 @@ END:VCALENDAR
                 },
                 {
                     "type": "button",
-                    "title": "Add to Calendar",
+                    "title": <b>"Add to Calendar"</b>,
 		    "style":{
 			"bold":true    
                         "color":"#002677",
