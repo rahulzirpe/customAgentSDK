@@ -188,6 +188,10 @@ if (preferredDateInput) {
                       {
                         "type": "button",
                         "title": quickReply1,
+			"style":{
+			"bold":true,    
+                        "color":"#002677"
+                        },
                         "click": {
                           "actions": [
                             {
@@ -200,6 +204,10 @@ if (preferredDateInput) {
                       {
                         "type": "button",
                         "title": quickReply2,
+			"style":{
+			"bold":true,    
+                        "color":"#002677"
+                        },
                         "click": {
                           "actions": [
                             {
@@ -212,6 +220,10 @@ if (preferredDateInput) {
                       {
                         "type": "button",
                         "title": quickReply3,
+			"style":{
+			"bold":true,    
+                        "color":"#002677"
+                        },
                         "click": {
                           "actions": [
                             {
@@ -248,6 +260,10 @@ if (preferredDateInput) {
                       {
                         "type": "button",
                         "title": quickReply1,
+			"style":{
+			"bold":true,    
+                        "color":"#002677"
+                        },
                         "click": {
                           "actions": [
                             {
@@ -260,6 +276,10 @@ if (preferredDateInput) {
                       {
                         "type": "button",
                         "title": quickReply2,
+			"style":{
+			"bold":true,    
+                        "color":"#002677"
+                        },
                         "click": {
                           "actions": [
                             {
@@ -272,6 +292,10 @@ if (preferredDateInput) {
                       {
                         "type": "button",
                         "title": quickReply3,
+			"style":{
+			"bold":true,    
+                        "color":"#002677"
+                        },
                         "click": {
                           "actions": [
                             {
@@ -284,6 +308,10 @@ if (preferredDateInput) {
                       {
                         "type": "button",
                         "title": quickReply4,
+			"style":{
+			"bold":true,    
+                        "color":"#002677"
+                        },
                         "click": {
                           "actions": [
                             {
@@ -323,6 +351,10 @@ if (preferredDateInput) {
                       {
                         "type": "button",
                         "title": quickReply1,
+			"style":{
+			"bold":true,    
+                        "color":"#002677"
+                        },
                         "click": {
                           "actions": [
                             {
@@ -335,6 +367,10 @@ if (preferredDateInput) {
                       {
                         "type": "button",
                         "title": quickReply2,
+			"style":{
+			"bold":true,    
+                        "color":"#002677"
+                        },
                         "click": {
                           "actions": [
                             {
@@ -347,6 +383,10 @@ if (preferredDateInput) {
                       {
                         "type": "button",
                         "title": quickReply3,
+			"style":{
+			"bold":true,    
+                        "color":"#002677"
+                        },
                         "click": {
                           "actions": [
                             {
@@ -359,6 +399,10 @@ if (preferredDateInput) {
                       {
                         "type": "button",
                         "title": quickReply4,
+			"style":{
+			"bold":true,    
+                        "color":"#002677"
+                        },
                         "click": {
                           "actions": [
                             {
@@ -371,6 +415,10 @@ if (preferredDateInput) {
                       {
                         "type": "button",
                         "title": quickReply5,
+			"style":{
+			"bold":true,    
+                        "color":"#002677"
+                        },
                         "click": {
                           "actions": [
                             {
