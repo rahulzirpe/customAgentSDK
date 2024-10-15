@@ -433,7 +433,8 @@ END:VCALENDAR
 		    "style":{
                         "color":"#002677",
                         "border-color":"#002677",
-			"font-weight": "bold"    
+			"font-weight": "bold",
+			 "bold":true   
                     },	
                     "click": {
                         "actions": [{
