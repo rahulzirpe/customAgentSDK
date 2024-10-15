@@ -431,11 +431,9 @@ END:VCALENDAR
                     "type": "button",
                     "title": "Add to Calendar",
 		    "style":{
+			"bold":true    
                         "color":"#002677",
-                        "border-color":"#002677",
-			"font-weight": "bold",
-			 "bold":true   
-                    },	
+                        },	
                     "click": {
                         "actions": [{
                             "type": "link",
