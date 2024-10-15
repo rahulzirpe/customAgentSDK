@@ -128,6 +128,10 @@ if (preferredDateInput) {
                     "elements": [{
                         "type": "text",
                         "text": text1,
+			"style":{
+			   "color":"#4b4d4f",
+			   "background-color":"#fafafa"
+			},
                         "tag": "title"
                       },
                       {
@@ -183,6 +187,10 @@ if (preferredDateInput) {
                     "elements": [{
                         "type": "text",
                         "text": text1,
+			 "style":{
+			   "color":"#4b4d4f",
+			   "background-color":"#fafafa"
+			},   
                         "tag": "title"
                       },
                       {
@@ -255,6 +263,10 @@ if (preferredDateInput) {
                     "elements": [{
                         "type": "text",
                         "text": text1,
+			"style":{
+			   "color":"#4b4d4f",
+			   "background-color":"#fafafa"
+			},
                         "tag": "title"
                       },
                       {
@@ -346,6 +358,10 @@ if (preferredDateInput) {
                     "elements": [{
                         "type": "text",
                         "text": text1,
+			"style":{
+			   "color":"#4b4d4f",
+			   "background-color":"#fafafa"
+			},
                         "tag": "title"
                       },
                       {
@@ -481,7 +497,11 @@ END:VCALENDAR
             "elements": [
                 {
                     "type": "text",
-                    "text": "Click the button below to add the appointment to your calendar."
+                    "text": "Click the button below to add the appointment to your calendar.",
+		    "style":{
+			   "color":"#4b4d4f",
+			   "background-color":"#fafafa"
+			}
                 },
                 {
                     "type": "button",
