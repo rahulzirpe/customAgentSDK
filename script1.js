@@ -133,6 +133,10 @@ if (preferredDateInput) {
                       {
                         "type": "button",
                         "title": quickReply1,
+			 "style":{
+			"bold":true,    
+                        "color":"#002677"
+                        },     
                         "click": {
                           "actions": [
                             {
@@ -145,6 +149,10 @@ if (preferredDateInput) {
                       {
                         "type": "button",
                         "title": quickReply2,
+			 "style":{
+			"bold":true,    
+                        "color":"#002677"
+                        },     
                         "click": {
                           "actions": [
                             {
