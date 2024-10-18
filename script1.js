@@ -481,6 +481,8 @@ END:VCALENDAR
 
     // Encode the ICS content to create a data URI
     const encodedUri = encodeURI('data:text/calendar;charset=utf-8,' + icsContent);
+    console.log("EncodedURL="+encodedUri);
+	
 
     // Send structured content with a single button to download ICS
     var notifyWhenDone = function (err) {
