@@ -22,7 +22,7 @@ lpTag.agentSDK.init({
 // Set min and max for preferred date input
 const today = new Date();
 const maxDate = new Date();
-maxDate.setDate(today.getDate() + 10);
+maxDate.setDate(today.getDate() +395);
 
 document.getElementById('preferredDate').min = today.toISOString().split('T')[0];
 document.getElementById('preferredDate').max = maxDate.toISOString().split('T')[0];
